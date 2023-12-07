@@ -91,7 +91,7 @@ pub fn star_one(mut input: impl BufRead) -> String {
 
                 let new_value = match ranges.binary_search_by_key(&value, |range| range.source) {
                     Ok(i) => ranges[i].destination,
-                    Err(i) if i == 0 => value,
+                    Err(0) => value,
                     Err(i) => ranges[i - 1].get(value).unwrap_or(value),
                 };
 
@@ -212,7 +212,7 @@ pub fn star_two(mut input: impl BufRead) -> String {
                 // Binary search through the ranges for the new type.
                 let new_value = match ranges.binary_search_by_key(&value, |range| range.source) {
                     Ok(i) => ranges[i].destination,
-                    Err(i) if i == 0 => value,
+                    Err(0) => value,
                     Err(i) => ranges[i - 1].get(value).unwrap_or(value),
                 };
 
