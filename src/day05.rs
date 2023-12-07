@@ -1,5 +1,34 @@
 use std::{cmp::Reverse, collections::HashMap, io::BufRead, time::Instant};
 
+struct RangeMap {
+    source: usize,
+    destination: usize,
+    length: usize,
+}
+
+impl RangeMap {
+    fn new(source: usize, destination: usize, length: usize) -> Self {
+        RangeMap {
+            source,
+            destination,
+            length,
+        }
+    }
+
+    // fn try_merge(&self, other: &RangeMap) -> Option<RangeMap> {
+    //     todo!()
+    // }
+
+    fn get(&self, value: usize) -> Option<usize> {
+        if self.source < value && value < (self.source + self.length) {
+            // println!("{}: {:?}", value, ranges[i - 1]);
+            Some(value + self.destination - self.source)
+        } else {
+            None
+        }
+    }
+}
+
 pub fn star_one(mut input: impl BufRead) -> String {
     let mut str = String::new();
     input.read_to_string(&mut str).expect("cannot read string");
@@ -41,9 +70,9 @@ pub fn star_one(mut input: impl BufRead) -> String {
             let source_value = parts.next().unwrap().parse::<usize>().unwrap();
             let range = parts.next().unwrap().parse::<usize>().unwrap();
 
-            ranges.push((source_value, destination_value, range));
+            ranges.push(RangeMap::new(source_value, destination_value, range));
         }
-        ranges.sort_by_key(|(source_value, _, _)| *source_value);
+        ranges.sort_by_key(|range| range.source);
         conversion_map.insert((source, destination), ranges);
     }
 
@@ -60,32 +89,10 @@ pub fn star_one(mut input: impl BufRead) -> String {
                     .get(&(value_type.to_string(), new_value_type.clone()))
                     .unwrap();
 
-                // println!("{:?}", ranges);
-                // println!("new_value_type: {}", new_value_type);
-
-                // println!("ranges: {:?}", ranges);
-
-                let new_value = {
-                    match ranges.binary_search_by_key(&value, |(source_value, _, _)| *source_value)
-                    {
-                        Ok(i) => ranges[i].1,
-                        Err(i) => {
-                            // println!("{}: {:?}", value, i);
-                            if i == 0 {
-                                value
-                            } else {
-                                // println!("{}: {:?}", value, ranges[i - 1]);
-                                if ranges[i - 1].0 < value
-                                    && value < (ranges[i - 1].0 + ranges[i - 1].2)
-                                {
-                                    // println!("{}: {:?}", value, ranges[i - 1]);
-                                    value + ranges[i - 1].1 - ranges[i - 1].0
-                                } else {
-                                    value
-                                }
-                            }
-                        }
-                    }
+                let new_value = match ranges.binary_search_by_key(&value, |range| range.source) {
+                    Ok(i) => ranges[i].destination,
+                    Err(i) if i == 0 => value,
+                    Err(i) => ranges[i - 1].get(value).unwrap_or(value),
                 };
 
                 value = new_value;
@@ -116,6 +123,8 @@ fn collapse_ranges(mut ranges: Vec<(usize, usize)>) -> Vec<(usize, usize)> {
             final_ranges.push(range)
         }
     }
+
+    println!("{:?}", final_ranges);
     final_ranges
 }
 
@@ -177,10 +186,11 @@ pub fn star_two(mut input: impl BufRead) -> String {
             let source_value = parts.next().unwrap().parse::<usize>().unwrap();
             let range = parts.next().unwrap().parse::<usize>().unwrap();
 
-            rev_ranges.push((source_value, destination_value, range));
+            // Swap the source and destination values.
+            rev_ranges.push(RangeMap::new(destination_value, source_value, range));
         }
 
-        rev_ranges.sort_by_key(|(_, destination_value, _)| *destination_value);
+        rev_ranges.sort_by_key(|range| range.source);
 
         rev_conversion_map.insert((destination, source), rev_ranges);
     }
@@ -199,20 +209,11 @@ pub fn star_two(mut input: impl BufRead) -> String {
                     .get(&(value_type, new_value_type))
                     .unwrap();
 
-                let new_value = match ranges
-                    .binary_search_by_key(&value, |(_, destination_value, _)| *destination_value)
-                {
-                    Ok(i) => ranges[i].0,
-                    Err(i) => {
-                        if i != 0
-                            && ranges[i - 1].1 < value
-                            && value < (ranges[i - 1].1 + ranges[i - 1].2)
-                        {
-                            value + ranges[i - 1].0 - ranges[i - 1].1
-                        } else {
-                            value
-                        }
-                    }
+                // Binary search through the ranges for the new type.
+                let new_value = match ranges.binary_search_by_key(&value, |range| range.source) {
+                    Ok(i) => ranges[i].destination,
+                    Err(i) if i == 0 => value,
+                    Err(i) => ranges[i - 1].get(value).unwrap_or(value),
                 };
 
                 value = new_value;
