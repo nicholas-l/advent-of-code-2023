@@ -37,7 +37,6 @@ pub fn star_one(input: impl BufRead) -> String {
                 .filter(|new_d| new_d > &d)
                 .count()
         })
-        .inspect(|&x| println!("{}", x))
         .product::<usize>()
         .to_string()
 }
