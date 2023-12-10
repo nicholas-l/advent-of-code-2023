@@ -58,9 +58,6 @@ pub fn star_one(mut input: impl BufRead) -> String {
             Instruction::Right => *right,
         };
         steps += 1;
-        // if steps > 20 {
-        //     break;
-        // }
     }
     steps.to_string()
 }
@@ -105,9 +102,6 @@ pub fn star_two(mut input: impl BufRead) -> String {
         .collect::<HashSet<_>>();
 
     current.shrink_to_fit();
-
-    // println!("{:?}", current);
-    // println!("{:?}", end);
 
     // Assume that the end node is the only node that the path ends with i.e.
     // does not go from one *Z to another different *Z
