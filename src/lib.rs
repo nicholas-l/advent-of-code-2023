@@ -163,10 +163,10 @@ mod tests {
 
     #[test]
     fn day05_complete() {
-        let (star_one, _star_two, filepath) = get_day(5);
+        let (star_one, star_two, filepath) = get_day(5);
         assert_eq!(star_one(get_data(&filepath)), "322500873");
-        // Very slow implementation
-        // assert_eq!(star_two(get_data(&filepath)), "108956227");
+
+        assert_eq!(star_two(get_data(&filepath)), "108956227");
     }
 
     #[test]
