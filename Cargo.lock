@@ -12,7 +12,6 @@ dependencies = [
  "lazy_static",
  "nom",
  "num-integer",
- "once_cell",
  "rayon",
  "regex",
 ]
