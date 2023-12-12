@@ -2,6 +2,7 @@ use ahash::RandomState;
 use std::{collections::HashMap, io::BufRead};
 
 use itertools::{repeat_n, Itertools};
+use rayon::prelude::*;
 
 #[derive(Clone, PartialEq, Eq, Debug, Hash)]
 enum Status {
@@ -40,9 +41,11 @@ pub fn star_one(input: impl BufRead) -> String {
         })
         .collect::<Vec<_>>();
 
-    let mut cache = HashMap::default();
-    data.iter()
-        .map(|(s, c)| process(s, c, 0, &mut cache))
+    data.into_par_iter()
+        .map(|(s, c)| {
+            let mut cache = HashMap::default();
+            process(&s, &c, 0, &mut cache)
+        })
         .sum::<usize>()
         .to_string()
 }
@@ -128,9 +131,11 @@ pub fn star_two(input: impl BufRead) -> String {
         })
         .collect::<Vec<_>>();
 
-    let mut cache = HashMap::default();
-    data.iter()
-        .map(|(s, c)| process(s, c, 0, &mut cache))
+    data.into_par_iter()
+        .map(|(s, c)| {
+            let mut cache = HashMap::default();
+            process(&s, &c, 0, &mut cache)
+        })
         .sum::<usize>()
         .to_string()
 }
