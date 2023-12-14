@@ -1,5 +1,5 @@
 use std::{
-    collections::{hash_map::Entry, HashMap, HashSet},
+    collections::{hash_map::Entry, HashMap},
     io::BufRead,
     ops::Add,
     str::FromStr,
@@ -49,11 +49,9 @@ impl Map {
     }
 
     fn tilt(&mut self, direction: Direction) {
-        let mut moved = HashSet::new();
         // Roll the rocks
-        while let Some(pos) = get_next(&self.0, &moved, direction) {
-            // find rollable rock
-
+        // find rollable rock
+        while let Some(pos) = self.get_next_rollable(direction) {
             let mut next_pos: (isize, isize) = (pos.0 as isize, pos.1 as isize);
 
             // While the next position is empty `Some(None)` i.e. there is a place but it is not
@@ -69,9 +67,77 @@ impl Map {
 
             let r = self.0[pos.0][pos.1].take();
             self.0[next_pos.0 as usize][next_pos.1 as usize] = r;
-
-            moved.insert((next_pos.0 as usize, next_pos.1 as usize));
         }
+    }
+
+    fn get_next_rollable(&self, direction: Direction) -> Option<(usize, usize)> {
+        match direction {
+            Direction::North => {
+                for j in 0..self.0[0].len() {
+                    if let Some(x) = self
+                        .0
+                        .iter()
+                        .enumerate()
+                        .skip(1)
+                        .filter(|(_i, row)| row[j] == Some(Rock::Round))
+                        .filter(|(i, _)| self.0[i - 1][j].is_none())
+                        .map(|(i, _row)| (i, j))
+                        .next()
+                    {
+                        return Some(x);
+                    }
+                }
+            }
+            Direction::West => {
+                for (i, row) in self.0.iter().enumerate() {
+                    if let Some(x) = row
+                        .iter()
+                        .enumerate()
+                        .skip(1)
+                        .filter(|(_i, c)| c == &&Some(Rock::Round))
+                        .filter(|(j, _)| self.0[i][j - 1].is_none())
+                        .map(|(j, _)| (i, j))
+                        .next()
+                    {
+                        return Some(x);
+                    }
+                }
+            }
+            Direction::South => {
+                for j in (0..self.0[0].len()).rev() {
+                    if let Some(pos) = self
+                        .0
+                        .iter()
+                        .enumerate()
+                        .rev()
+                        .skip(1)
+                        .filter(|(_i, row)| row[j] == Some(Rock::Round))
+                        .filter(|(i, _)| self.0[i + 1][j].is_none())
+                        .map(|(i, _)| (i, j))
+                        .next()
+                    {
+                        return Some(pos);
+                    }
+                }
+            }
+            Direction::East => {
+                for (i, row) in self.0.iter().enumerate().rev() {
+                    if let Some(pos) = row
+                        .iter()
+                        .enumerate()
+                        .rev()
+                        .skip(1)
+                        .filter(|(_j, c)| c == &&Some(Rock::Round))
+                        .filter(|(j, _)| self.0[i][j + 1].is_none())
+                        .map(|(j, _)| (i, j))
+                        .next()
+                    {
+                        return Some(pos);
+                    }
+                }
+            }
+        }
+        None
     }
 }
 
@@ -94,60 +160,6 @@ impl FromStr for Map {
                 .collect::<Vec<_>>(),
         ))
     }
-}
-
-fn get_next(
-    map: &[Vec<Option<Rock>>],
-    moved: &HashSet<(usize, usize)>,
-    direction: Direction,
-) -> Option<(usize, usize)> {
-    match direction {
-        Direction::North => {
-            for j in 0..map[0].len() {
-                if let Some(x) = map
-                    .iter()
-                    .enumerate()
-                    .filter(|(i, _)| !moved.contains(&(*i, j)))
-                    .find_map(|(i, row)| {
-                        if row[j] == Some(Rock::Round) {
-                            return Some((i, j));
-                        }
-                        None
-                    })
-                {
-                    return Some(x);
-                }
-            }
-        }
-        Direction::West => {
-            for (i, row) in map.iter().enumerate() {
-                for (j, c) in row.iter().enumerate() {
-                    if c == &Some(Rock::Round) && !moved.contains(&(i, j)) {
-                        return Some((i, j));
-                    }
-                }
-            }
-        }
-        Direction::South => {
-            for j in (0..map[0].len()).rev() {
-                for i in (0..map.len()).rev() {
-                    if map[i][j] == Some(Rock::Round) && !moved.contains(&(i, j)) {
-                        return Some((i, j));
-                    }
-                }
-            }
-        }
-        Direction::East => {
-            for i in (0..map.len()).rev() {
-                for j in (0..map[i].len()).rev() {
-                    if map[i][j] == Some(Rock::Round) && !moved.contains(&(i, j)) {
-                        return Some((i, j));
-                    }
-                }
-            }
-        }
-    }
-    None
 }
 
 pub fn star_one(mut input: impl BufRead) -> String {
