@@ -38,7 +38,6 @@ pub fn star_one(mut input: impl BufRead) -> String {
             let (left, right) = other
                 .trim_matches(|c| c == '(' || c == ')')
                 .split_once(", ")
-                .map(|(left, right)| (left, right))
                 .unwrap();
             (from, (left, right))
         })
@@ -89,7 +88,6 @@ pub fn star_two(mut input: impl BufRead) -> String {
             let (left, right) = other
                 .trim_matches(|c| c == '(' || c == ')')
                 .split_once(", ")
-                .map(|(left, right)| (left, right))
                 .unwrap();
             (from, (left, right))
         })

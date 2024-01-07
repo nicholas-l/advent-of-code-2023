@@ -71,7 +71,7 @@ impl Grid {
         // All positions on the top row
         let top_positions = self
             .0
-            .get(0)
+            .first()
             .map(|row| {
                 row.iter()
                     .enumerate()
