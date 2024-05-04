@@ -89,7 +89,7 @@ pub fn star_one(mut input: impl BufRead) -> String {
 
     for x in min_x..=max_x {
         if matches!(grid.get(&(x, min_y)), Some(Position::Trench))
-            && grid.get(&(x, min_y + 1)).is_none()
+            && !grid.contains_key(&(x, min_y + 1))
         {
             grid.insert((x, min_y + 1), Position::Lagoon);
             stack.push((x, min_y + 2));
