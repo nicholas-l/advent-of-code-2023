@@ -13,7 +13,7 @@ pub fn star_one(input: impl BufRead) -> String {
             let first_digit = digits.next().unwrap();
 
             // If there is only one digit then the last digit is the same as the first
-            let last_digit = digits.last().unwrap_or(first_digit);
+            let last_digit = digits.next_back().unwrap_or(first_digit);
 
             first_digit * 10 + last_digit
         })
@@ -49,7 +49,7 @@ pub fn star_two(input: impl BufRead) -> String {
                 .map(|c| c.to_digit(10).unwrap());
 
             let first_digit = digits.next().unwrap();
-            let last_digit = digits.last().unwrap_or(first_digit);
+            let last_digit = digits.next_back().unwrap_or(first_digit);
 
             first_digit * 10 + last_digit
         })

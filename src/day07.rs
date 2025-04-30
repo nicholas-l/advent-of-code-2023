@@ -242,7 +242,7 @@ pub fn star_two(input: impl BufRead) -> String {
             hand_combinations.sort();
 
             (
-                hand_combinations.into_iter().last().unwrap(),
+                hand_combinations.into_iter().next_back().unwrap(),
                 cards_input,
                 bid,
             )

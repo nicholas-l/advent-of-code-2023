@@ -138,8 +138,8 @@ impl FromStr for Instuction2 {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.split(' ');
-        let s = s.last().unwrap();
+        let mut s = s.split(' ');
+        let s = s.next_back().unwrap();
         let s = s.trim_matches('(').trim_matches(')').trim_matches('#');
         let value = usize::from_str_radix(&s[..5], 16).unwrap();
         let direction = match &s[5..] {
