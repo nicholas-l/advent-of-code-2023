@@ -1,5 +1,6 @@
 use std::{
     collections::{HashSet, VecDeque},
+    hash::RandomState,
     io::BufRead,
     ops::Add,
     str::FromStr,
@@ -222,7 +223,7 @@ pub fn star_two(mut input: impl BufRead) -> String {
 
     collapse_graph(&mut graph, &start, &end);
 
-    all_simple_paths(&graph, start, end, 5, None)
+    all_simple_paths::<_, _, RandomState>(&graph, start, end, 5, None)
         .map(|x: Vec<_>| {
             x.windows(2)
                 .map(|edge| graph.edge_weight(edge[0], edge[1]).unwrap())
