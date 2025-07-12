@@ -33,7 +33,7 @@ pub fn star_one(input: impl BufRead) -> String {
                 cubes.iter().all(|(colour, x)| {
                     max.get(colour)
                         .map(|m| m >= x)
-                        .unwrap_or_else(|| panic!("COuld not find {}", colour))
+                        .unwrap_or_else(|| panic!("Could not find {colour}"))
                 })
             })
         })

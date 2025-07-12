@@ -35,7 +35,7 @@ impl<'a> Circuit<'a> {
                     '%' => (&input[1..], Module::FlipFlop),
                     '&' => (&input[1..], Module::Conjunction),
                     'b' if input == "broadcaster" => (input, Module::Broadcast),
-                    _ => return Err(format!("Invalid input {}", input)),
+                    _ => return Err(format!("Invalid input {input}")),
                 };
 
                 outputs.insert(module.0, output.clone());
@@ -127,7 +127,7 @@ pub fn star_one(mut input: impl BufRead) -> String {
             match circuit
                 .modules
                 .get(node)
-                .unwrap_or_else(|| panic!("Unable to find {}", node))
+                .unwrap_or_else(|| panic!("Unable to find {node}"))
             {
                 Module::Broadcast => {
                     let outputs = circuit.outputs.get(node).unwrap();
@@ -161,7 +161,7 @@ pub fn star_one(mut input: impl BufRead) -> String {
 
                     let previous_pulse: &mut bool = conjunction
                         .get_mut(from_node)
-                        .unwrap_or_else(|| panic!("Unable to find {} in", from_node));
+                        .unwrap_or_else(|| panic!("Unable to find {from_node} in"));
                     *previous_pulse = pulse;
 
                     let pulse_to_send = !conjunction.values().all(|pulse| *pulse);

@@ -27,7 +27,7 @@ impl Range {
             ))
         } else if let Some(new_end_destination) = range.get(self.end - 1) {
             let new_length = self.end - range.source;
-            assert!(new_length > 0, "Failed mapping {:?} in {:?}", self, range);
+            assert!(new_length > 0, "Failed mapping {self:?} in {range:?}");
             let new_destination = new_end_destination - new_length;
 
             Some((

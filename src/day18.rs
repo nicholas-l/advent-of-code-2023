@@ -147,7 +147,7 @@ impl FromStr for Instuction2 {
             "1" => Direction::Down,
             "2" => Direction::Left,
             "3" => Direction::Up,
-            x => panic!("Unknown direction {} from {}", x, s),
+            x => panic!("Unknown direction {x} from {s}"),
         };
         let distance = value;
 

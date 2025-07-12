@@ -45,7 +45,7 @@ pub fn star_two(input: impl BufRead) -> String {
                 card.replace("Card ", "")
                     .trim()
                     .parse::<usize>()
-                    .unwrap_or_else(|_e| panic!("Could not parse {}", card))
+                    .unwrap_or_else(|_e| panic!("Could not parse {card}"))
             };
 
             let (winning, have_numbers) = numbers.split_once('|').unwrap();
