@@ -253,7 +253,7 @@ pub fn star_two(input: impl BufRead) -> String {
                         'F' => Position::SouthEast,
                         'S' => Position::Start,
 
-                        x => panic!("Unknown character: {}", x),
+                        x => panic!("Unknown character: {x}"),
                     };
                     ((y as isize, x as isize), pos)
                 })
@@ -346,10 +346,10 @@ pub fn star_two(input: impl BufRead) -> String {
             }
             let count = get_count_to_edge(&map, &path.1, &(i, j));
             if count % 2 == 1 {
-                print!("{}", count);
+                print!("{count}");
                 total += 1;
             } else {
-                print!("{}", count);
+                print!("{count}");
             }
         }
         println!()

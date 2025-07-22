@@ -50,7 +50,7 @@ impl FromStr for Grid {
                     '\\' => Position::RightMirror,
                     '|' => Position::VericalSplitter,
                     '-' => Position::HoritzontalSplitter,
-                    x => return Err(format!("Invalid character {}", x)),
+                    x => return Err(format!("Invalid character {x}")),
                 });
             }
             grid.push(row);

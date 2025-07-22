@@ -29,8 +29,8 @@ enum MirrorPosition {
 impl Display for MirrorPosition {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            MirrorPosition::Row(row) => write!(f, "row {}", row),
-            MirrorPosition::Column(col) => write!(f, "column {}", col),
+            MirrorPosition::Row(row) => write!(f, "row {row}"),
+            MirrorPosition::Column(col) => write!(f, "column {col}"),
         }
     }
 }
@@ -109,8 +109,7 @@ fn find_mirror(group: &Map, existing: Option<&MirrorPosition>) -> Option<MirrorP
                     &group[offset + i]
                         == group.get(offset + length * 2 - i - 1).unwrap_or_else(|| {
                             panic!(
-                                "Trying to compare when offset is \n{}\n\n{}, {}, {}, {}",
-                                group, offset, length, row, i
+                                "Trying to compare when offset is \n{group}\n\n{offset}, {length}, {row}, {i}"
                             )
                         })
                 })

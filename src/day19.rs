@@ -99,7 +99,7 @@ impl FromStr for Op {
                     value,
                     output,
                 }),
-                _ => panic!("Unknown operator {}", op),
+                _ => panic!("Unknown operator {op}"),
             }
         } else {
             let output = s.parse().unwrap();
