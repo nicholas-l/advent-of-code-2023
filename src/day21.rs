@@ -60,18 +60,18 @@ impl GridExt for Grid {
     }
 }
 
-struct InfiniteGrid {
-    grid: Grid,
-}
+// struct InfiniteGrid {
+//     grid: Grid,
+// }
 
-impl FromStr for InfiniteGrid {
-    type Err = String;
+// impl FromStr for InfiniteGrid {
+//     type Err = String;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let grid = Grid::from_str(s)?;
-        Ok(InfiniteGrid { grid })
-    }
-}
+//     fn from_str(s: &str) -> Result<Self, Self::Err> {
+//         let grid = Grid::from_str(s)?;
+//         Ok(InfiniteGrid { grid })
+//     }
+// }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Position(isize, isize);
@@ -80,13 +80,13 @@ trait GridExt {
     fn get(&self, pos: &Position) -> Option<&Tile>;
 }
 
-impl GridExt for InfiniteGrid {
-    fn get(&self, pos: &Position) -> Option<&Tile> {
-        let row = pos.0.rem_euclid(self.grid.grid.len() as isize) as usize;
-        let col = pos.1.rem_euclid(self.grid.grid[0].len() as isize) as usize;
-        self.grid.grid.get(row).unwrap().get(col)
-    }
-}
+// impl GridExt for InfiniteGrid {
+//     fn get(&self, pos: &Position) -> Option<&Tile> {
+//         let row = pos.0.rem_euclid(self.grid.grid.len() as isize) as usize;
+//         let col = pos.1.rem_euclid(self.grid.grid[0].len() as isize) as usize;
+//         self.grid.grid.get(row).unwrap().get(col)
+//     }
+// }
 
 // Helped by https://github.com/villuna/aoc23/wiki/A-Geometric-solution-to-advent-of-code-2023,-day-21
 fn process(mut input: impl BufRead, max_steps: isize) -> String {
