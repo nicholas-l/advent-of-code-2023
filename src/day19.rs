@@ -263,7 +263,7 @@ pub fn star_two(mut input: impl BufRead) -> String {
         .into_par_iter()
         .map(|part| {
             part.values()
-                .map(|(min, max)| (*min..=*max))
+                .map(|(min, max)| *min..=*max)
                 .multi_cartesian_product()
                 .count()
         })
