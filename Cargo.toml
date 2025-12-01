@@ -19,7 +19,7 @@ nalgebra = "0.34.1"
 num-traits = "0.2.17"
 
 [dev-dependencies]
-criterion = "0.7"
+criterion = "0.8"
 
 [[bench]]
 name = "benchmark"
