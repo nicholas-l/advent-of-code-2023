@@ -233,15 +233,13 @@ pub fn star_two(mut input: impl BufRead) -> String {
                         queue.push_back((node, output, is_high));
                     }
                 }
-                Some(Module::FlipFlop) => {
+                Some(Module::FlipFlop) if !is_high => {
                     // We received a low pulse so process the pulse
-                    if !is_high {
-                        let is_on = circuit_state.flipflops.entry(node).or_insert(false);
-                        *is_on = !*is_on;
+                    let is_on = circuit_state.flipflops.entry(node).or_insert(false);
+                    *is_on = !*is_on;
 
-                        for output in circuit.outputs.get(node).unwrap() {
-                            queue.push_back((node, output, *is_on));
-                        }
+                    for output in circuit.outputs.get(node).unwrap() {
+                        queue.push_back((node, output, *is_on));
                     }
                 }
                 Some(Module::Conjunction) => {
@@ -255,6 +253,7 @@ pub fn star_two(mut input: impl BufRead) -> String {
                     }
                 }
                 None => {}
+                _ => {}
             }
         }
     }

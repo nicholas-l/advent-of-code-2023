@@ -111,15 +111,12 @@ pub fn star_one(mut input: impl BufRead) -> String {
             || matches!(grid.get(&(pos.0 - 1, pos.1)), Some(Position::Lagoon))
         {
             grid.insert(pos, Position::Lagoon);
-            stack.extend(
-                [
-                    (pos.0, pos.1 + 1),
-                    (pos.0, pos.1 - 1),
-                    (pos.0 + 1, pos.1),
-                    (pos.0 - 1, pos.1),
-                ]
-                .into_iter(),
-            );
+            stack.extend([
+                (pos.0, pos.1 + 1),
+                (pos.0, pos.1 - 1),
+                (pos.0 + 1, pos.1),
+                (pos.0 - 1, pos.1),
+            ]);
         }
     }
 
